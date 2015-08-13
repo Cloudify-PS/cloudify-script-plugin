@@ -55,7 +55,8 @@ def run(script_path, process=None, fabric_env=None, **kwargs):
     host_id = get_host_id(ctx)
     host_node_instance = ctx._endpoint.get_node_instance(host_id)
     host_node = ctx._endpoint.get_node(host_node_instance.node_id)
-    user_fabric_env = fabric_env or {}
+    fabric_env = fabric_env or {}
+    user_fabric_env = fabric_env 
     properties_fabric = host_node.get("cloudify_agent",{}).get("fabric",{}) or {}
     runtime_ssh_priv_key = (host_node_instance.runtime_properties.get("ssh_key",{}) or {}).get("private_key",{}) or {}
     fabric_env.update(properties_fabric)
