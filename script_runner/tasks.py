@@ -59,7 +59,7 @@ def run(script_path, process=None, fabric_env=None, **kwargs):
     properties_fabric = host_node.get("cloudify_agent",{}).get("fabric",{}) or {}
     runtime_ssh_priv_key = host_node_instance.runtime_properties.get("ssh_key",{}) or {}
     fabric_env.update(properties_fabric)
-    fabric_env['host']= host_node_instance.runtime_properties["public_ip"]
+    fabric_env['host']= host_node_instance.runtime_properties["ssh_public_ip"]
     if "path" in runtime_ssh_priv_key:
         fabric_env['key_filename'] = runtime_ssh_priv_key["path"]
     else:
