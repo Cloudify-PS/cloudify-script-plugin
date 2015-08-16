@@ -57,7 +57,7 @@ def run(script_path, process=None, fabric_env=None, **kwargs):
     host_node = ctx._endpoint.get_node(host_node_instance.node_id)
     fabric_env = fabric_env or {}
     properties_fabric = host_node.get("cloudify_agent",{}).get("fabric",{}) or {}
-    runtime_ssh_priv_key = host_node_instance.runtime_properties.get("ssh_key",{}
+    runtime_ssh_priv_key = host_node_instance.runtime_properties.get("ssh_key",{}) or {}
     fabric_env.update(properties_fabric)
     fabric_env['host']= host_node_instance.runtime_properties["public_ip"]
     if "path" in runtime_ssh_priv_key:
