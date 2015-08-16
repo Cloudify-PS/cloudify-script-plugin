@@ -56,18 +56,19 @@ def run(script_path, process=None, fabric_env=None, **kwargs):
     host_node_instance = ctx._endpoint.get_node_instance(host_id)
     host_node = ctx._endpoint.get_node(host_node_instance.node_id)
     fabric_env = fabric_env or {}
-    user_fabric_env = fabric_env 
     properties_fabric = host_node.get("cloudify_agent",{}).get("fabric",{}) or {}
-    runtime_ssh_priv_key = (host_node_instance.runtime_properties.get("ssh_key",{}) or {}).get("private_key",{}) or {}
+    runtime_ssh_priv_key = host_node_instance.runtime_properties.get("ssh_key",{}
     fabric_env.update(properties_fabric)
-    fabric_env['host']= host_node_instance.runtime_properties.get("public_ip","")
-    fabric_env['key_filename'] = runtime_ssh_priv_key["path"]
-    fabric_env['user'] = runtime_ssh_priv_key["user"]
-    fabric_env['port'] = host_node_instance.runtime_properties.get(ssh_port,"")
-    fabric_env.update(user_fabric_env)
+    fabric_env['host']= host_node_instance.runtime_properties["public_ip"]
+    if "path" in runtime_ssh_priv_key:
+        fabric_env['key_filename'] = runtime_ssh_priv_key["path"]
+    else:
+        raise NonRecoverableError('ssh key path is required')
+    if "user" in runtime_ssh_priv_key:
+        fabric_env['user'] = runtime_ssh_priv_key["user"]
+    fabric_env['port'] = host_node_instance.runtime_properties.get("ssh_port", "22")
     ctx.logger.info("About to call fabric run_script with env {0}".format(
         ', '.join("%s=%r" % (key,val) for (key,val) in fabric_env.iteritems())))
-
     fabric_plugin.run_script(script_path, fabric_env, process, kwargs)
 
 #    process = create_process_config(process or {}, kwargs)
