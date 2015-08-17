@@ -69,7 +69,7 @@ def run(script_path, process=None, fabric_env=None, **kwargs):
     fabric_env['port'] = host_node_instance.runtime_properties.get("ssh_port", "22")
     ctx.logger.info("About to call fabric run_script with env {0}".format(
         ', '.join("%s=%r" % (key,val) for (key,val) in fabric_env.iteritems())))
-    fabric_tasks.run_script(script_path, fabric_env, process, kwargs)
+    fabric_tasks.run_script(script_path = script_path, fabric_env = fabric_env, process = process, **kwargs)
 
 #    process = create_process_config(process or {}, kwargs)
 #    script_path = download_resource(ctx.download_resource, script_path)
