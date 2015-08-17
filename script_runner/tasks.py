@@ -60,6 +60,7 @@ def run(script_path, process=None, fabric_env=None, **kwargs):
     runtime_ssh_priv_key = host_node_instance.runtime_properties.get("ssh_key", {}) or {}
     fabric_env.update(properties_fabric)
     fabric_env['host'] = host_node_instance.runtime_properties["ssh_public_ip"]
+    fabric_env['host_string'] = host_node_instance.runtime_properties["ssh_public_ip"]
     if "path" in runtime_ssh_priv_key:
         fabric_env['key_filename'] = runtime_ssh_priv_key["path"]
     else:
