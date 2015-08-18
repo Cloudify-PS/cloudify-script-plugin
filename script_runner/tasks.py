@@ -53,26 +53,29 @@ def run(script_path, process=None, fabric_env=None, **kwargs):
     if script_path is None:
         raise NonRecoverableError('Script path parameter not defined')
     host_id = get_host_id(ctx)
-    host_node_instance = ctx._endpoint.get_node_instance(host_id)
-    host_node = ctx._endpoint.get_node(host_node_instance.node_id)
+    host_instance = ctx._endpoint.get_node_instance(host_id)
+    host_node = ctx._endpoint.get_node(host_instance.node_id)
     fabric_env = fabric_env or {}
-    properties_fabric = host_node.get("cloudify_agent", {}).get("fabric", {}) or {}
-    runtime_ssh_priv_key = host_node_instance.runtime_properties.get("ssh_key", {}) or {}
+    properties_fabric = host_node.get("cloudify_agent", {}).get(
+        "fabric", {}) or {}
+    runtime_ssh_priv_key = host_instance.runtime_properties.get(
+        "ssh_key", {}) or {}
     fabric_env.update(properties_fabric)
-    fabric_env['host'] = host_node_instance.runtime_properties["ssh_public_ip"]
-    fabric_env['host_string'] = host_node_instance.runtime_properties["ssh_public_ip"]
+    fabric_env['host'] = host_instance.runtime_properties["ssh_public_ip"]
+    fabric_env['host_string'] = host_instance.\
+        runtime_properties["ssh_public_ip"]
     if "path" in runtime_ssh_priv_key:
         fabric_env['key_filename'] = runtime_ssh_priv_key["path"]
     else:
         raise NonRecoverableError('ssh key path is required')
     if "user" in runtime_ssh_priv_key:
         fabric_env['user'] = runtime_ssh_priv_key["user"]
-    fabric_env['port'] = host_node_instance.runtime_properties.get(
+    fabric_env['port'] = host_instance.runtime_properties.get(
         "ssh_port", "22")
-    ctx.logger.info("About to call fabric run_script with env {0}".format(
-        ', '.join("%s=%r" % (key, val) for (key, val) in fabric_env.iteritems())))
     fabric_tasks.run_script(
-        script_path=script_path, fabric_env=fabric_env, process=process, **kwargs)
+        script_path=script_path,
+        fabric_env=fabric_env,
+        process=process, **kwargs)
 
 #    process = create_process_config(process or {}, kwargs)
 #    script_path = download_resource(ctx.download_resource, script_path)
@@ -89,7 +92,8 @@ def get_host_id(ctx):
 @workflow
 def execute_workflow(script_path, **kwargs):
     ctx = workflows_ctx._get_current_object()
-    ctx.logger.error('Script plugin is not allowed for workflows in VCA Blueprints')
+    ctx.logger.error(
+        'Script plugin is not allowed for workflows in VCA Blueprints')
     return None
     script_path = download_resource(
         ctx.internal.handler.download_blueprint_resource, script_path)
