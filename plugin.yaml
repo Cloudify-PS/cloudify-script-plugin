@@ -4,5 +4,5 @@
 
 plugins:
     script:
-        executor: host_agent
-        source: https://github.com/vcloudair/cloudify-script-plugin/archive/1.2.1m1.zip
+        executor: central_deployment_agent
+        source: https://github.com/vcloudair/cloudify-script-plugin/archive/1.2.1m5.zip
