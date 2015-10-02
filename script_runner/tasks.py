@@ -64,10 +64,12 @@ def run(script_path, process=None, fabric_env=None, **kwargs):
     fabric_env['host'] = host_instance.runtime_properties["ssh_public_ip"]
     fabric_env['host_string'] = host_instance.\
         runtime_properties["ssh_public_ip"]
+    if "key" in runtime_ssh_priv_key:
+        fabric_env['key'] = runtime_ssh_priv_key["key"]
     if "path" in runtime_ssh_priv_key:
         fabric_env['key_filename'] = runtime_ssh_priv_key["path"]
-    else:
-        raise NonRecoverableError('ssh key path is required')
+    if not fabric_env.get('key') and not fabric_env.get('key_filename'):
+        raise NonRecoverableError('ssh key content/key path is required')
     if "user" in runtime_ssh_priv_key:
         fabric_env['user'] = runtime_ssh_priv_key["user"]
     fabric_env['port'] = host_instance.runtime_properties.get(
