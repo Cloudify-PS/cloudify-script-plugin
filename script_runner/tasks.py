@@ -36,7 +36,7 @@ from cloudify.proxy.server import (UnixCtxProxy,
                                    TCPCtxProxy,
                                    HTTPCtxProxy,
                                    StubCtxProxy)
-from fabric_plugin import tasks as fabric_tasks
+from fabric_runner import tasks as fabric_tasks
 
 try:
     import zmq  # noqa
@@ -58,6 +58,8 @@ def run(script_path, process=None, fabric_env=None, **kwargs):
     fabric_env = fabric_env or {}
     properties_fabric = host_node.get("cloudify_agent", {}).get(
         "fabric", {}) or {}
+    if 'user' in host_node.properties.get("cloudify_agent", {}):
+        fabric_env['user'] = host_node.properties["cloudify_agent"]['user']
     runtime_ssh_priv_key = host_instance.runtime_properties.get(
         "ssh_key", {}) or {}
     fabric_env.update(properties_fabric)
