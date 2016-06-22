@@ -11,7 +11,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-.. automodule:: script_runner.tasks
+.. automodule:: wallescript_runner.tasks
    :members:
    :undoc-members:
    :show-inheritance:

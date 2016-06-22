@@ -17,12 +17,12 @@
 from setuptools import setup
 
 setup(
-    name='cloudify-script-plugin',
+    name='cloudify-wallescript-plugin',
     version='1.4.99',
     author='Gigaspaces',
     author_email='cloudify@gigaspaces.com',
     packages=[
-        'script_runner',
+        'wallescript_runner',
         'fabric_runner'
     ],
     description='Plugin for running scripts',

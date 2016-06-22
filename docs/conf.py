@@ -24,7 +24,7 @@ if not on_rtd:  # only import and set the theme if we're building docs locally
 
 # General information about the project.
 project = 'cloudify-script-plugin'
-package = 'script_runner'
+package = 'wallescript_runner'
 author = 'Gigaspaces'
 copyright = '2014, Gigaspaces'
 

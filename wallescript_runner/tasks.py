@@ -30,7 +30,7 @@ from cloudify.workflows import ctx as workflows_ctx
 from cloudify.decorators import operation, workflow
 from cloudify.exceptions import NonRecoverableError
 
-from script_runner import eval_env
+from wallescript_runner import eval_env
 from cloudify.proxy.client import CTX_SOCKET_URL
 from cloudify.proxy.server import (UnixCtxProxy,
                                    TCPCtxProxy,
