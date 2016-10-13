@@ -18,7 +18,7 @@ from setuptools import setup
 
 setup(
     name='cloudify-wallescript-plugin',
-    version='1.4.99',
+    version='1.4walle',
     author='Gigaspaces',
     author_email='cloudify@gigaspaces.com',
     packages=[

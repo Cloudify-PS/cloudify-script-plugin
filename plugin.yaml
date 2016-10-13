@@ -5,6 +5,6 @@
 plugins:
     script:
         executor: central_deployment_agent
-        source: https://github.com/0lvin/cloudify-script-plugin/archive/1.4-build.zip
+        source: https://github.com/Cloudify-PS/cloudify-script-plugin/archive/1.4walle.zip
         package_name: cloudify-wallescript-plugin
-        package_version: '1.4.99'
+        package_version: '1.4walle'
