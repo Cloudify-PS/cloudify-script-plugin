@@ -70,7 +70,9 @@ def run(script_path, process=None, **kwargs):
     script_path = download_resource(ctx.download_resource, script_path)
     os.chmod(script_path, 0755)
     script_func = get_run_script_func(script_path, process)
-    return process_execution(script_func, script_path, ctx, process)
+    script_result = process_execution(script_func, script_path, ctx, process)
+    os.remove(script_path)
+    return script_result
 
 
 @workflow
@@ -78,7 +80,9 @@ def execute_workflow(script_path, **kwargs):
     ctx = workflows_ctx._get_current_object()
     script_path = download_resource(
         ctx.internal.handler.download_deployment_resource, script_path)
-    return process_execution(eval_script, script_path, ctx)
+    script_result = process_execution(eval_script, script_path, ctx)
+    os.remove(script_path)
+    return script_result
 
 
 def create_process_config(process, operation_kwargs):
@@ -295,7 +299,7 @@ def download_resource(download_resource_func, script_path):
         return script_path
     else:
         return download_resource_func(script_path,
-                                      target_path=tempfile.mkstemp(
+                                      target_path=tempfile.mktemp(
                                           dir=get_tempdir(executable=True)))
 
 
