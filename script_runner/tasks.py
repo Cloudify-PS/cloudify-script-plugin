@@ -29,6 +29,7 @@ from cloudify import ctx as operation_ctx
 from cloudify.workflows import ctx as workflows_ctx
 from cloudify.decorators import operation, workflow
 from cloudify.exceptions import NonRecoverableError
+from cloudify.utils import get_tempdir
 
 from script_runner import eval_env
 from script_runner import constants
@@ -287,12 +288,15 @@ def download_resource(download_resource_func, script_path):
                                               response.status_code))
         content = response.text
         suffix = script_path.split('/')[-1]
-        script_path = tempfile.mktemp(suffix='-{0}'.format(suffix))
+        script_path = tempfile.mktemp(suffix='-{0}'.format(suffix),
+                                      dir=get_tempdir(executable=True))
         with open(script_path, 'w') as f:
             f.write(content)
         return script_path
     else:
-        return download_resource_func(script_path)
+        return download_resource_func(script_path,
+                                      target_path=tempfile.mkstemp(
+                                          dir=get_tempdir(executable=True)))
 
 
 class OutputConsumer(object):
