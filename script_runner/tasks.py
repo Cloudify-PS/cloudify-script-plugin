@@ -302,9 +302,7 @@ def download_resource(download_resource_func, script_path):
             f.write(content)
         return script_path
     else:
-        return download_resource_func(script_path,
-                                      target_path=tempfile.mktemp(
-                                          dir=exec_tempdir))
+        return download_resource_func(script_path)
 
 
 class OutputConsumer(object):
