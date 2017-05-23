@@ -18,7 +18,7 @@ from setuptools import setup
 
 setup(
     name='cloudify-script-plugin',
-    version='1.4post1',
+    version='1.4.post1',
     author='Gigaspaces',
     author_email='cloudify@gigaspaces.com',
     packages=['script_runner'],

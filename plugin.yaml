@@ -7,4 +7,4 @@ plugins:
         executor: host_agent
         source: https://github.com/Cloudify-PS/cloudify-script-plugin/archive/1.4-p001.zip
         package_name: cloudify-script-plugin
-        package_version: '1.4post1'
+        package_version: '1.4.post1'
