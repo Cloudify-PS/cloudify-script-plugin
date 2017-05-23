@@ -29,7 +29,6 @@ from cloudify import ctx as operation_ctx
 from cloudify.workflows import ctx as workflows_ctx
 from cloudify.decorators import operation, workflow
 from cloudify.exceptions import NonRecoverableError
-from cloudify.utils import get_tempdir
 
 from script_runner import eval_env
 from script_runner import constants
@@ -52,6 +51,11 @@ try:
 except ImportError:
     ScriptException = None
 
+try:
+    from cloudify.utils import get_tempdir
+    exec_tempdir = get_tempdir(True)
+except ImportError:
+    exec_tempdir = None
 
 ILLEGAL_CTX_OPERATION_ERROR = RuntimeError('ctx may only abort or return once')
 UNSUPPORTED_SCRIPT_FEATURE_ERROR = \
@@ -293,14 +297,14 @@ def download_resource(download_resource_func, script_path):
         content = response.text
         suffix = script_path.split('/')[-1]
         script_path = tempfile.mktemp(suffix='-{0}'.format(suffix),
-                                      dir=get_tempdir(executable=True))
+                                      dir=exec_tempdir)
         with open(script_path, 'w') as f:
             f.write(content)
         return script_path
     else:
         return download_resource_func(script_path,
                                       target_path=tempfile.mktemp(
-                                          dir=get_tempdir(executable=True)))
+                                          dir=exec_tempdir))
 
 
 class OutputConsumer(object):
