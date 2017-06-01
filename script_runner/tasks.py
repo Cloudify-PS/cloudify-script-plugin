@@ -18,6 +18,7 @@ import json
 import subprocess
 import os
 import sys
+import shutil
 import time
 import threading
 from StringIO import StringIO
@@ -52,10 +53,10 @@ except ImportError:
     ScriptException = None
 
 try:
-    from cloudify.utils import get_tempdir
-    exec_tempdir = get_tempdir(True)
+    from cloudify.utils import get_exec_tempdir
 except ImportError:
-    exec_tempdir = None
+    get_exec_tempdir = None
+
 
 ILLEGAL_CTX_OPERATION_ERROR = RuntimeError('ctx may only abort or return once')
 UNSUPPORTED_SCRIPT_FEATURE_ERROR = \
@@ -72,6 +73,12 @@ def run(script_path, process=None, **kwargs):
         raise NonRecoverableError('Script path parameter not defined')
     process = create_process_config(process or {}, kwargs)
     script_path = download_resource(ctx.download_resource, script_path)
+    if get_exec_tempdir and get_exec_tempdir() != os.path.dirname(
+            script_path):
+        new_script_path = os.path.join(get_exec_tempdir(),
+                                       os.path.basename(script_path))
+        shutil.move(script_path, new_script_path)
+        script_path = new_script_path
     os.chmod(script_path, 0755)
     script_func = get_run_script_func(script_path, process)
     script_result = process_execution(script_func, script_path, ctx, process)
