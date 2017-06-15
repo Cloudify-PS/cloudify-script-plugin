@@ -303,6 +303,7 @@ def download_resource(download_resource_func, script_path):
                                               response.status_code))
         content = response.text
         suffix = script_path.split('/')[-1]
+        exec_tempdir = get_exec_tempdir() if get_exec_tempdir else None
         script_path = tempfile.mktemp(suffix='-{0}'.format(suffix),
                                       dir=exec_tempdir)
         with open(script_path, 'w') as f:
